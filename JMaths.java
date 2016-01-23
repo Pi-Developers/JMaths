@@ -31,7 +31,7 @@ public class JMaths {
         int cursor = sScannerHelper.askAsInt(" 1) Generate Fibonacci Series ");
         if (cursor == 1) {
             fibonacci();
-        }else {
+        }else { 
             System.out.println("Wrong Input");
         }
 
