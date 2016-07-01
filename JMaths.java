@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @author Sahid Almas
+ * @author Pi-Devs
  */
 
 
@@ -26,14 +26,19 @@ import java.security.Key;
 import java.util.Scanner;
 
 public class JMaths {
-    
+
     private static final String ALGO = "AES";
     private static final byte[] keyValue =
             new byte[] { 'T', 'h', 'e', 'B', 'e', 's', 't',
                     'S', 'e', 'c', 'r','e', 't', 'K', 'e', 'y' };
 
     private static ScannerHelper sScannerHelper = new ScannerHelper(" : ");
-
+    static int factorial(int n){
+        if (n == 0)
+            return 1;
+        else
+            return(n * factorial(n-1));
+    }
     public static void main(String[] args) {
         String JMATHS = "       ____  ___      __  __        \n      / /  |/  /___ _/ /_/ /_  _____\n __  / / /|_/ / __ `/ __/ __ \\\\/ ___/\n/ /_/ / /  / / /_/ / /_/ / / (__  ) \n\\\\____/_/  /_/\\\\__,_/\\\\__/_/ /_/____/ ";
         System.out.println(JMATHS);
@@ -42,10 +47,17 @@ public class JMaths {
 
         System.out.println("Would you like to do ?");
         int cursor = sScannerHelper.askAsInt(" 1) Generate Fibonacci Series :\n" +
-                " 2) Check Even or odd : \n" +
-                " 3) Check prime no : \n" +
-                " 4) Encrypt text : \n" +
-                " 5) Decrypt text :");
+                " 2)  Check Even or odd : \n" +
+                " 3)  Check prime no : \n" +
+                " 4)  Encrypt text : \n" +
+                " 5)  Decrypt text : \n" +
+                " 6)  Check Divisibility : \n" +
+                " 7)  Compute Pascal Triangle : \n" +
+                " 8)  Logarithms Calculator :\n"+
+                " 9)  Compute Factorial : \n" +
+                " 10) Solve a quadratic equation : \n"+
+                " 11) Check Golden Ration Ration : \n"+
+                " 99) For Exit ");
         if (cursor == 1) {
             fibonacci();
         }else if (cursor == 2) {
@@ -56,14 +68,84 @@ public class JMaths {
             encrypt();
         }else if (cursor == 5) {
             decrypt();
-        }
-        else {
+        }else if (cursor == 99) {
+
+            System.exit(0);
+        }else if (cursor == 7) {
+            int row = sScannerHelper.askAsInt(" How many rows of pascal's triangle to generate ? ");
+            genPasCal(row);
+        }else if (cursor == 6) {
+            int first_no = sScannerHelper.askAsInt(" Enter Desired Number Here");
+            int second_no = sScannerHelper.askAsInt(" Enter number to be divided with");
+            if (first_no %second_no != 0)
+                System.out.println(("Your input is not divisible by " + second_no));
+            else
+                System.out.println("Your input is divisible by " + second_no);
+        }else if (cursor == 8) {
+            int type = sScannerHelper.askAsInt("Choose an option:\\n\\t1-Base n\\n\\t2-base 10\\n\\t3-natural logarithm");
+            if (type == 1) {
+
+                int nu = sScannerHelper.askAsInt(" Enter a number");
+                int base = sScannerHelper.askAsInt(" Enter base");
+                System.out.println(logOfBase(base,nu));
+            }else if (type == 3) {
+
+                long nu = sScannerHelper.askAsLong(" Enter a number");
+                System.out.println(Math.log(nu));
+            }else if (type == 2){
+                long nu = sScannerHelper.askAsLong(" Enter a number");
+                System.out.println(Math.log10(nu));
+            }
+        }else if (cursor == 9) {
+            int nu = sScannerHelper.askAsInt(" Enter a number");
+            System.out.println(factorial(nu));
+
+        }else if (cursor==10) {
+
+            System.out.println("Enter a,b,c co-efficient");
+            int a = sScannerHelper.askAsInt(">");
+            int b = sScannerHelper.askAsInt(">");
+            int c = sScannerHelper.askAsInt(">");
+
+            double temp1 = Math.sqrt(b * b - 4 * a * c);
+
+            double root1 = (-b +  temp1) / (2*a) ;
+            double root2 = (-b -  temp1) / (2*a) ;
+
+            System.out.println("The roots of the Quadratic Equation are "+root1+" and "+root2);
+
+        }else if (cursor== 11) {
+
+          int n = sScannerHelper.askAsInt(" Enter first number");
+            int m = sScannerHelper.askAsInt(" Enter second number");
+            if (m > n ) {
+                System.out.println("n must be greater than m");
+            }else {
+                float Q = ((float)n)/m;
+                if ( Q > 1.68 && Q < 1.69) {
+                    //print "\n Golden Ratio approximately exists between these 2 digits"
+                    System.out.println(" Golden Ratio approximately exists between these 2 digits");
+                }else {
+                    System.out.println("  Golden Ratio  doesn't exist between these 2 digits");
+                }
+            }
+        }else {
+
+
             System.out.println("Wrong Input");
         }
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.gc();
+            }
+        }));
 
 
     }
-
+    public static double logOfBase(int base, int num) {
+        return Math.log(num) / Math.log(base);
+    }
     private static void decrypt() {
         String text = sScannerHelper.askAsString("Enter your text to decrypt ");
         try {
@@ -71,6 +153,20 @@ public class JMaths {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private static void genPasCal(int rows) {
+
+        for(int i =0;i<rows;i++) {
+            int number = 1;
+            System.out.format("%" + (rows - i) * 2 + "s", "");
+            for (int j = 0; j <= i; j++) {
+                System.out.format("%4d", number);
+                number = number * (i - j) / (j + 1);
+
+            }
+            System.out.println();
+        }
+
     }
 
     private static void encrypt() {
@@ -169,7 +265,8 @@ public class JMaths {
                 String q = askAsString(questions);
                 result = Integer.parseInt(q);
             }catch (Exception e) {
-                System.out.println("Your input is not Long . Try to enter again");
+                System.out.println("Your input is not Long . ");
+                System.exit(0);
                 askAsInt(questions);
 
             }
@@ -182,7 +279,8 @@ public class JMaths {
                 String q = askAsString(questions);
                 result = Integer.parseInt(q);
             }catch (Exception e) {
-                System.out.println("Your input is not Integer. Try to enter again");
+                System.out.println("Your input is not Integer.");
+                System.exit(0);
                 askAsInt(questions);
 
             }
@@ -196,5 +294,5 @@ public class JMaths {
             return object;
         }
     }
-}
 
+}
